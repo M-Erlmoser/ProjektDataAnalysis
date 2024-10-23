@@ -36,7 +36,7 @@ Das Skript führt die folgenden Schritte durch:
 
 - **`twitter_training.csv`**: Trainingsdatensatz, der die Textdaten und ihre zugehörigen Sentiments enthält.
 - **`twitter_validation.csv`**: Validierungsdatensatz, der zum Testen des Modells verwendet wird.
-- **`structured_predictions_with_validation_metrics.csv`**: Ergebnisdatei mit den strukturierten Vorhersagen und Erfolgsangaben.
+- **`Prediction_Sentiment.csv`**: Ergebnisdatei mit den strukturierten Vorhersagen und Erfolgsangaben.
 
 ## Benötigte Bibliotheken
 
