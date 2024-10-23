@@ -64,6 +64,6 @@ test_df['predicted_sentiment'] = y_val_pred
 test_df['success'] = test_df['actual_sentiment'] == test_df['predicted_sentiment']
 test_df['success'] = test_df['success'].replace({True: 'succes', False: 'fail'})
 # In eine neue CSV-Datei speichern
-output_path = 'Vorhersage_Sentiment.csv'
+output_path = 'Prediction_Sentiment.csv'
 test_df.to_csv(output_path, index=False)
 print(f'Strukturierte Vorhersagen wurden in {output_path} gespeichert.')
