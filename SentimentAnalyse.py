@@ -5,6 +5,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 
+##Stopwörter wurden manuell ausgewählt
+custom_stopwords = [
+ "game", "nvidia", "im", "overwatch", "world", "warcraft", "xbox", "series", "xboxseriesx", "verizon","rainbowsixsiege",
+    "siege", "ghostreconbreakpoint", "just", "rdr2", "pubg", "ps5", "makes", "really", "make", "gotta", "today", "franchise"
+    "league", "legends", "leagueoflegends", "home", "depot", "play", "guys", "new", "gta", "google", "dont", "fortnite",
+    "facebook", "didnt", "know", "20", "time", "dota", "cyberpunk2077", "cyberpunk", "black", "ops", "cold", "duty",
+    "callofduty", "csgo", "want", "borderlands", "worldofwarcraft", "playstation5", "ive", "madden", "franchise", "league",
+    "dota2", "esports", "wait", "blackopscoldwar", "war", "warzone", "modernwarfare", "battlefield", "creed", "assassins",
+    "apexlegends", "got", "odyssey",
+]
 ## Daten bereinigung
 # Textbereinigungsfunktion
 def clean_text(text):
@@ -55,8 +65,46 @@ print(f'Genauigkeit vom Validierungsset: {validation_accuracy}')
 validation_report = classification_report(test_df.iloc[:, 2], y_val_pred)
 print("Validierungsset:")
 print(validation_report)
+## TOPIC MODELING
+# Themen nach Kategorien gruppieren
+grouped_topics = test_df.groupby(test_df.columns[1])
+def topic_modeling_per_category(text_data, n_topics=1, no_top_words=10):
+    # Bereinigen der Texte
+    cleaned_texts = text_data.apply(clean_text)
+    # Vektorisierung der bereinigten Texte
+    count_vect = CountVectorizer(max_df=0.8, min_df=2, stop_words=custom_stopwords, max_features=10000)
+    text_counts = count_vect.fit_transform(cleaned_texts)
+    # LDA Topic Modeling
+    lda = LatentDirichletAllocation(n_components=n_topics, max_iter=10, learning_method='online', random_state=52)
+    lda.fit(text_counts)
+    # Themen anzeigen
+    feature_names = count_vect.get_feature_names_out()
+    topics = []
+    for idx, topic in enumerate(lda.components_):
+        top_words = " ".join([feature_names[i] for i in topic.argsort()[:-no_top_words - 1:-1]])
+        topics.append(f"Top Wörter : {top_words}")
+    return topics
+# Alle Themen pro Kategorie speichern
+all_topics = {}
+for category, group in grouped_topics:
+    print(f"\nThemen für Kategorie: {category}")
+    text_data = group.iloc[:, 3] 
+    topics = topic_modeling_per_category(text_data)
+    all_topics[category] = topics
+    for topic in topics:
+        print(topic)
 
 ## Output CSV Datei
+# Ergebnisse der Themenanalyse in eine CSV-Datei schreiben
+output_topics = []
+for category, topics in all_topics.items():
+    for topic in topics:
+        output_topics.append({"Kategorie": category, "Thema": topic})
+
+topics_output_df = pd.DataFrame(output_topics)
+topics_output_df.to_csv('categorized_topics.csv', index=False)
+print("Themen für jede Kategorie wurden in 'categorized_topics.csv' gespeichert.")
+
 # Vergleich: Succes vs. Fail
 test_df['actual_sentiment'] = test_df.iloc[:, 2]
 test_df['predicted_sentiment'] = y_val_pred       
