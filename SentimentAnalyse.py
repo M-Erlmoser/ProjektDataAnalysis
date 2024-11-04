@@ -1,9 +1,10 @@
 import pandas as pd
 import re
-from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
+from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS,CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.decomposition import LatentDirichletAllocation
 
 ##Stopwörter wurden manuell ausgewählt
 custom_stopwords = [
@@ -88,7 +89,7 @@ def topic_modeling_per_category(text_data, n_topics=1, no_top_words=10):
 all_topics = {}
 for category, group in grouped_topics:
     print(f"\nThemen für Kategorie: {category}")
-    text_data = group.iloc[:, 3] 
+    text_data = group.iloc[:, 3]
     topics = topic_modeling_per_category(text_data)
     all_topics[category] = topics
     for topic in topics:
@@ -103,11 +104,11 @@ for category, topics in all_topics.items():
 
 topics_output_df = pd.DataFrame(output_topics)
 topics_output_df.to_csv('categorized_topics.csv', index=False)
-print("Themen für jede Kategorie wurden in 'categorized_topics.csv' gespeichert.")
+print("\nThemen für jede Kategorie wurden in 'categorized_topics.csv' gespeichert.")
 
 # Vergleich: Succes vs. Fail
 test_df['actual_sentiment'] = test_df.iloc[:, 2]
-test_df['predicted_sentiment'] = y_val_pred       
+test_df['predicted_sentiment'] = y_val_pred
 # Erfolg/Nicht-Erfolg Spalte hinzufügen
 test_df['success'] = test_df['actual_sentiment'] == test_df['predicted_sentiment']
 test_df['success'] = test_df['success'].replace({True: 'succes', False: 'fail'})
