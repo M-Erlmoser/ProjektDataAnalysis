@@ -88,17 +88,17 @@ pip install pandas scikit-learn
 Testset:
               precision    recall  f1-score   support
 
-  Irrelevant       0.67      0.50      0.57      2592
-    Negative       0.67      0.79      0.73      4519
-     Neutral       0.66      0.60      0.63      3596
-    Positive       0.69      0.72      0.71      4230
+  	Irrelevant       0.67      0.50      0.57      2592
+    	Negative       0.67      0.79      0.73      4519
+     	Neutral       0.66      0.60      0.63      3596
+    	Positive       0.69      0.72      0.71      4230
 
-    accuracy                           0.67     14937
-   macro avg       0.67      0.65      0.66     14937
-weighted avg       0.67      0.67      0.67     14937
+    	accuracy                           0.67     14937
+  	macro avg       0.67      0.65      0.66     14937
+	weighted avg       0.67      0.67      0.67     14937
 
-Genauigkeit vom Validierungsset: 0.7867867867867868
-Validierungsset:
+	Genauigkeit vom Validierungsset: 0.7867867867867868
+	Validierungsset:
               precision    recall  f1-score   support
 
   Irrelevant       0.77      0.66      0.71       171
